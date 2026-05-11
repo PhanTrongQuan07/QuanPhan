@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hệ Thống Đăng Nhập</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#0f172a,#1e293b,#334155);
+    overflow:hidden;
+}
+
+.container{
+    width:400px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(12px);
+    border-radius:25px;
+    padding:30px;
+    color:white;
+    box-shadow:0 0 30px rgba(0,0,0,0.5);
+}
+
+.title{
+    text-align:center;
+    font-size:30px;
+    margin-bottom:25px;
+    font-weight:bold;
+}
+
+.input-box{
+    margin:15px 0;
+}
+
+.input-box input{
+    width:100%;
+    padding:14px;
+    border:none;
+    outline:none;
+    border-radius:14px;
+    background:rgba(255,255,255,0.15);
+    color:white;
+    font-size:15px;
+}
+
+.input-box input::placeholder{
+    color:#ddd;
+}
+
+.btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:14px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    margin-top:15px;
+    transition:0.3s;
+}
+
+.btn:hover{
+    transform:scale(1.03);
+    background:#1d4ed8;
+}
+
+.social-btn{
+    width:100%;
+    padding:13px;
+    border:none;
+    border-radius:14px;
+    margin-top:12px;
+    cursor:pointer;
+    font-size:15px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    transition:0.3s;
+}
+
+.google{
+    background:white;
+    color:black;
+}
+
+.google:hover{
+    background:#eee;
+}
+
+.facebook{
+    background:#1877f2;
+    color:white;
+}
+
+.facebook:hover{
+    background:#166fe5;
+}
+
+.switch{
+    margin-top:20px;
+    text-align:center;
+    font-size:14px;
+}
+
+.switch a{
+    color:#60a5fa;
+    text-decoration:none;
+}
+
+.switch a:hover{
+    text-decoration:underline;
+}
+
+.hidden{
+    display:none;
+}
+
+.message{
+    margin-top:10px;
+    font-size:14px;
+    text-align:left;
+}
+
+.error{
+    color:red;
+}
+
+.success{
+    color:#00ff88;
+}
+
+.forgot{
+    text-align:right;
+    margin-top:8px;
+}
+
+.forgot a{
+    color:#60a5fa;
+    text-decoration:none;
+    font-size:14px;
+}
+
+.forgot a:hover{
+    text-decoration:underline;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- LOGIN -->
+
+<div id="loginForm">
+
+<div class="title">Đăng Nhập</div>
+
+<div class="input-box">
+<input id="loginEmail" type="email"
+placeholder="Email hoặc số điện thoại">
+</div>
+
+<div class="input-box">
+<input id="loginPass" type="password"
+placeholder="Mật khẩu">
+</div>
+
+<div class="forgot">
+<a href="#" onclick="showForgot()">
+Quên mật khẩu?
+</a>
+</div>
+
+<p id="loginMsg" class="message"></p>
+
+<button class="btn" onclick="login()">
+Đăng Nhập
+</button>
+
+<button class="social-btn google"
+onclick="googleLogin()">
+
+<i class="fab fa-google"></i>
+Đăng nhập bằng Google
+
+</button>
+
+<button class="social-btn facebook"
+onclick="facebookLogin()">
+
+<i class="fab fa-facebook-f"></i>
+Đăng nhập bằng Facebook
+
+</button>
+
+<div class="switch">
+Chưa có tài khoản?
+<a href="#" onclick="showRegister()">
+Đăng ký
+</a>
+</div>
+
+</div>
+
+
+<!-- REGISTER -->
+
+<div id="registerForm" class="hidden">
+
+<div class="title">Đăng Ký</div>
+
+<div class="input-box">
+<input type="text"
+placeholder="Tên người dùng">
+</div>
+
+<div class="input-box">
+<input type="email"
+placeholder="Email">
+</div>
+
+<div class="input-box">
+<input id="password"
+type="password"
+placeholder="Mật khẩu">
+</div>
+
+<div class="input-box">
+<input id="confirmPassword"
+type="password"
+placeholder="Nhập lại mật khẩu">
+</div>
+
+<p id="registerMsg" class="message"></p>
+
+<button class="btn" onclick="register()">
+Đăng Ký
+</button>
+
+<button class="social-btn google"
+onclick="googleLogin()">
+
+<i class="fab fa-google"></i>
+Google
+
+</button>
+
+<button class="social-btn facebook"
+onclick="facebookLogin()">
+
+<i class="fab fa-facebook-f"></i>
+Facebook
+
+</button>
+
+<div class="switch">
+Đã có tài khoản?
+<a href="#" onclick="showLogin()">
+Đăng nhập
+</a>
+</div>
+
+</div>
+
+
+<!-- QUÊN MẬT KHẨU -->
+
+<div id="forgotForm" class="hidden">
+
+<div class="title">Quên Mật Khẩu</div>
+
+<div class="input-box">
+<input id="recoverInput"
+type="text"
+placeholder="Nhập Gmail hoặc SĐT">
+</div>
+
+<button class="btn" onclick="sendOTP()">
+Gửi OTP
+</button>
+
+<div class="input-box">
+<input id="otpInput"
+type="text"
+placeholder="Nhập mã OTP">
+</div>
+
+<div class="input-box">
+<input id="newPassword"
+type="password"
+placeholder="Mật khẩu mới">
+</div>
+
+<div class="input-box">
+<input id="confirmNewPassword"
+type="password"
+placeholder="Nhập lại mật khẩu mới">
+</div>
+
+<p id="forgotMsg" class="message"></p>
+
+<button class="btn"
+onclick="resetPassword()">
+
+Đổi Mật Khẩu
+
+</button>
+
+<div class="switch">
+<a href="#" onclick="showLogin()">
+Quay lại đăng nhập
+</a>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+// CHUYỂN FORM
+
+function showRegister(){
+
+document.getElementById("loginForm")
+.classList.add("hidden");
+
+document.getElementById("forgotForm")
+.classList.add("hidden");
+
+document.getElementById("registerForm")
+.classList.remove("hidden");
+
+}
+
+function showLogin(){
+
+document.getElementById("registerForm")
+.classList.add("hidden");
+
+document.getElementById("forgotForm")
+.classList.add("hidden");
+
+document.getElementById("loginForm")
+.classList.remove("hidden");
+
+}
+
+function showForgot(){
+
+document.getElementById("loginForm")
+.classList.add("hidden");
+
+document.getElementById("registerForm")
+.classList.add("hidden");
+
+document.getElementById("forgotForm")
+.classList.remove("hidden");
+
+}
+
+// ĐĂNG KÝ
+
+function register(){
+
+let pass =
+document.getElementById("password").value;
+
+let confirm =
+document.getElementById("confirmPassword").value;
+
+let msg =
+document.getElementById("registerMsg");
+
+if(pass !== confirm){
+
+msg.innerHTML =
+"❌ Mật khẩu nhập lại không khớp!";
+
+msg.className =
+"message error";
+
+return;
+
+}
+
+msg.innerHTML =
+"✅ Đăng ký thành công!";
+
+msg.className =
+"message success";
+
+}
+
+// ĐĂNG NHẬP
+
+function login(){
+
+let msg =
+document.getElementById("loginMsg");
+
+msg.innerHTML =
+"✅ Đăng nhập thành công!";
+
+msg.className =
+"message success";
+
+}
+
+// GOOGLE LOGIN
+
+function googleLogin(){
+
+window.open(
+"https://accounts.google.com/",
+"_blank"
+);
+
+}
+
+// FACEBOOK LOGIN
+
+function facebookLogin(){
+
+window.open(
+"https://www.facebook.com/login/",
+"_blank"
+);
+
+}
+
+// GỬI OTP
+
+let countdown;
+let timeLeft = 60;
+
+function sendOTP(){
+
+    let msg =
+    document.getElementById("forgotMsg");
+
+    let button =
+    event.target;
+
+    // THÔNG BÁO GỬI OTP
+
+    msg.innerHTML =
+    "📩 OTP đã được gửi về tin nhắn SMS!";
+
+    msg.className =
+    "message success";
+
+    // KHÓA NÚT
+
+    button.disabled = true;
+
+    button.style.opacity = "0.7";
+
+    // ĐẾM NGƯỢC 60 GIÂY
+
+    timeLeft = 60;
+
+    button.innerHTML =
+    "Gửi lại OTP sau 60s";
+
+    countdown = setInterval(function(){
+
+        timeLeft--;
+
+        button.innerHTML =
+        "Gửi lại OTP sau " + timeLeft + "s";
+
+        if(timeLeft <= 0){
+
+            clearInterval(countdown);
+
+            button.disabled = false;
+
+            button.style.opacity = "1";
+
+            button.innerHTML =
+            "Gửi OTP";
+
+        }
+
+    },1000);
+
+}
+
+// ĐỔI MẬT KHẨU
+
+function resetPassword(){
+
+let pass =
+document.getElementById("newPassword").value;
+
+let confirm =
+document.getElementById("confirmNewPassword").value;
+
+let msg =
+document.getElementById("forgotMsg");
+
+if(pass !== confirm){
+
+msg.innerHTML =
+"❌ Mật khẩu mới không khớp!";
+
+msg.className =
+"message error";
+
+return;
+
+}
+
+msg.innerHTML =
+"✅ Đổi mật khẩu thành công!";
+
+msg.className =
+"message success";
+
+}
+
+</script>
+
+</body>
+</html>
